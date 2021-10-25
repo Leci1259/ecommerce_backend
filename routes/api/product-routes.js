@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const productData = await Product.findByPk(req.params.id, {
-      include: [{ model: Tag},{model: Category}]
+      include: [{ model: Tag, through: ProductTag}, Category]
     });
 
     if (!productData) {
@@ -79,7 +79,7 @@ router.put('/:id', async (req, res) => {
       id: req.params.id,
     },
   })
-    .then((product) => {
+    .then(product => {
       // find all associated tags from ProductTag
       return ProductTag.findAll({ where: { product_id: req.params.id } });
     })
